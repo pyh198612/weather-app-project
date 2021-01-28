@@ -41,10 +41,16 @@ a:hover {
 
 h1,
 h3,
+footer,
 .col-2,
 .col-6,
 .main-session .temperature p {
   text-align: center;
+}
+
+footer {
+  margin: 20px 0;
+  color: #686d76;
 }
 
 .main-session p {
@@ -118,4 +124,13 @@ h3,
 
 #now-weather-description {
   text-transform: capitalize;
+}
+
+#github-link,
+#hosting-link {
+  color: #6f86d6;
+}
+
+#coder {
+  font-weight: bold;
 }
