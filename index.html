@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/cebd9ba44a.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <link rel="stylesheet" href="SRC/styles.css" />
+
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="main-session">
+            <div class="row">
+                <div class="col-5 time">
+                    <h1><i class="fas fa-location-arrow"></i> <span>Hamburg</span></h1>
+                    <p id="main-session-date">03.01.2021 Today</p>
+                    <p id="main-session-day">Sunday</p>
+                    <p id="main-session-time">11:40 am</p>
+                </div>
+                <div class="col-3">
+                    <img src="IMG/rain.png" alt="rainy" class="main-image" />
+                </div>
+                <div class="col-4 temperature">
+                    <h3> Now
+                        <span id="current-temp">2</span>
+                        <a href="#" id="celsius-link">°C </a>
+                        |
+                        <a href="#" id="fahrenheit-link">°F</a>
+                    </h3>
+                    <p> <span id="now-min-temp">0</span> - <span id="now-max-temp">4</span> °C </p>
+                    <p> <span id="now-weather-description">Rainy</span></p>
+                    <p> <i class="fas fa-umbrella"></i> <span id="now-precipitation">80</span> % </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="forecast-session">
+            <p>
+            <div class="row align-items-center">
+                <div class="col-1"></div>
+                <div class="col-2">
+                    04.01.2021
+                </div>
+                <div class="col-2">
+                    Monday
+                </div>
+                <div class="col-2">
+                    <img src="IMG/cloudy.png" alt="cloudy" class="small-image" />
+                </div>
+                <div class="col-2">
+                    0 - 3 °C
+                </div>
+                <div class="col-2">
+                    <i class="fas fa-umbrella"></i> 20%
+                </div>
+                <div class="col-1"></div>
+            </div>
+            </p>
+            <hr />
+            <p>
+            <div class="row align-items-center">
+                <div class="col-1"></div>
+                <div class="col-2">
+                    05.01.2021
+                </div>
+                <div class="col-2">
+                    Tuesday
+                </div>
+                <div class="col-2">
+                    <img src="IMG/snowflake.png" alt="snow" class="small-image" />
+                </div>
+                <div class="col-2">
+                    -3 - 2 °C
+                </div>
+                <div class="col-2">
+                    <i class="fas fa-umbrella"></i> 30%
+                </div>
+                <div class="col-1"></div>
+            </div>
+            </p>
+            <hr />
+            <p>
+            <div class="row align-items-center">
+                <div class="col-1"></div>
+                <div class="col-2">
+                    06.01.2021
+                </div>
+                <div class="col-2">
+                    Wednesday
+                </div>
+                <div class="col-2">
+                    <img src="IMG/rain.png" alt="rainy" class="small-image" />
+                </div>
+                <div class="col-2">
+                    0 - 2 °C
+                </div>
+                <div class="col-2">
+                    <i class="fas fa-umbrella"></i> 50%
+                </div>
+                <div class="col-1"></div>
+            </div>
+            </p>
+            <hr />
+            <p>
+            <div class="row align-items-center">
+                <div class="col-1"></div>
+                <div class="col-2">
+                    07.01.2021
+                </div>
+                <div class="col-2">
+                    Thursday
+                </div>
+                <div class="col-2">
+                    <img src="IMG/sunny.png" alt="sunny" class="small-image" />
+                </div>
+                <div class="col-2">
+                    2 - 5 °C
+                </div>
+                <div class="col-2">
+                    <i class="fas fa-umbrella"></i> 0%
+                </div>
+                <div class="col-1"></div>
+            </div>
+            </p>
+            <hr />
+            <p>
+            <div class="row align-items-center">
+                <div class="col-1"></div>
+                <div class="col-2">
+                    08.01.2021
+                </div>
+                <div class="col-2">
+                    Friday
+                </div>
+                <div class="col-2">
+                    <img src="IMG/cloudy with sun.png" alt="sunny with cloud" class="small-image">
+                </div>
+                <div class="col-2">
+                    1 - 3 °C
+                </div>
+                <div class="col-2">
+                    <i class="fas fa-umbrella"></i> 10%
+                </div>
+                <div class="col-1"></div>
+            </div>
+            </p>
+        </div>
+
+        <div class="search-session">
+            <form id="search-form">
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <input type="search" id="search-input" class="form-control"
+                                placeholder="Enter another city" />
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <input type="submit" value="Search" class="form-control rounded-pill search-button"
+                                autocomplete="on" />
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <input type="submit" value="Current" class="form-control rounded-pill current-button"
+                                autocomplete="on" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="SRC/index.js"></script>
+
+</body>
+
+</html>

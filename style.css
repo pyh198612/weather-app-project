@@ -1,0 +1,121 @@
+body {
+  font-family: "Arvo", serif;
+  max-width: 900px;
+  margin: 70px auto;
+}
+
+h1,
+h3 {
+  padding-bottom: 20px;
+  font-weight: 800;
+  color: #fff;
+}
+
+h1 {
+  padding-top: 50px;
+}
+
+h3 {
+  padding-top: 60px;
+}
+
+hr {
+  color: #49c3ee;
+  opacity: 30%;
+}
+
+input {
+  margin: 20px auto;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+  transform: all 200ms ease-in-out;
+}
+
+a:hover {
+  color: #1a508b;
+  text-decoration: underline;
+}
+
+h1,
+h3,
+.col-2,
+.col-6,
+.main-session .temperature p {
+  text-align: center;
+}
+
+.main-session p {
+  line-height: 15px;
+  color: #fff;
+  font-size: 20px;
+}
+
+.main-session .time p {
+  text-align: left;
+  position: relative;
+  left: 106px;
+}
+
+.main-session,
+.search-session {
+  background-image: linear-gradient(to top, #48c6ef 0%, #6f86d6 100%);
+}
+
+.main-session {
+  border-radius: 20px 20px 0 0;
+  padding: 13px 0;
+}
+
+.main-session .main-image {
+  width: 250px;
+}
+
+.forecast-session .small-image {
+  width: 70px;
+}
+
+.forecast-session {
+  border: 1px solid #49c3ee;
+  color: #686d76;
+  font-size: 20px;
+}
+
+.search-session {
+  border-radius: 0 0 20px 20px;
+}
+
+.search-session .form-control {
+  margin: 30px 0;
+}
+
+.search-session .search-button {
+  background: transparent;
+  border-color: #fff;
+  color: #fff;
+  transition: all 200ms ease-in-out;
+}
+
+.search-session .search-button:hover {
+  color: #6f86d6;
+  background: #fff;
+  border-color: #6f86d6;
+}
+
+.search-session .current-button {
+  color: #6f86d6;
+  background: #fff;
+  transition: all 200ms ease-in-out;
+}
+
+.search-session .current-button:hover {
+  background: transparent;
+  border-color: #fff;
+  color: #fff;
+}
+
+#now-weather-description {
+  text-transform: capitalize;
+}
