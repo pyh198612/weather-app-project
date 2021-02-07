@@ -1,8 +1,8 @@
-//W4-Feature #1
+//Main session time
 function showCurrentDate (event) {
   let date = currentTime.getDate (); 
   let conDate = ("0"+date).slice(-2);
-  let month = currentTime.getMonth()+"1";
+  let month = ("0"+(currentTime.getMonth()+1)).slice(-2);
   let year = currentTime.getFullYear();
   return `${conDate}.${month}.${year} Today`;
 }
@@ -43,29 +43,14 @@ todayDay.innerHTML = showCurrentDay (currentTime);
 let todayTime = document.querySelector ("#main-session-time");
 todayTime.innerHTML = showCurrentTime (currentTime);
 
-//W4-Feature #2
+//Main-session
 
 function showTemperature (response) {
+  console.log (response.data);
   let temperature = Math.round(response.data.main.temp); 
   let nowTemp = document.querySelector ("#current-temp");
   nowTemp.innerHTML = temperature; 
-
-  function showFahrenheitTemp (event) {
-      event.preventDefault ();
-      let nowTemp = document.querySelector ("#current-temp");
-      nowTemp.innerHTML = Math.round((temperature*9/5) + 32);
-  }
-
-  function showCelsiusTemp (event) {
-      let nowTemp = document.querySelector ("#current-temp");
-      nowTemp.innerHTML = temperature; 
-  }
-  let fahrenheit = document.querySelector ("#fahrenheit-link");
-  fahrenheit.addEventListener ("click", showFahrenheitTemp);
-
-  let celsius = document.querySelector ("#celsius-link");
-  celsius.addEventListener ("click", showCelsiusTemp);
-
+  
   let maxTemperature = Math.round (response.data.main.temp_max);
   let nowMaxTemp = document.querySelector ("#now-max-temp");
   nowMaxTemp.innerHTML = maxTemperature; 
@@ -79,6 +64,7 @@ function showTemperature (response) {
   nowDescription.innerHTML = description; 
   
 }
+
 
 function showCityPosition (response) {
   function showCityPrecipitation (response) {
@@ -103,15 +89,13 @@ function searchCity (event) {
   let h1Span = document.querySelector ("span");
   h1Span.innerHTML = `${cityInput.value}`;
   
-  //W5-Homework
   let apiKey = "3cbad6f9a349042eb44901a3bdcb3200";
   let city = cityInput.value; 
   let units = "metric";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
-  
   axios.get(apiUrl).then(showTemperature);
 
-  let apiGeocodingUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityInput.value}&appid=${apiKey}`
+  let apiGeocodingUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityInput.value}&appid=${apiKey}`;
   axios.get(apiGeocodingUrl).then (showCityPosition);
 }
 
@@ -119,29 +103,12 @@ function searchCity (event) {
 let searchEngine = document.querySelector ("#search-form");
 searchEngine.addEventListener ("submit", searchCity);
 
-//W5 Homework - add a current button
+// For Current button
 
 function showCurrentLocationTemp (response){
   let temp = Math.round(response.data.main.temp);
   let currentTemp = document.querySelector ("#current-temp");
   currentTemp.innerHTML = temp; 
-     
-  function showCurrentFahTemp (event) {
-      event.preventDefault ();
-      let currentLocationTemp = document.querySelector ("#current-temp");
-      currentLocationTemp.innerHTML = Math.round((temp*9/5) + 32);
-  }
-
-  function showCurrentCelTemp (event) {
-      let currentLocationTemp = document.querySelector ("#current-temp");
-      currentLocationTemp.innerHTML = temp; 
-  }
-
-  let currentF = document.querySelector ("#fahrenheit-link");
-  currentF.addEventListener ("click", showCurrentFahTemp);
-
-  let currentC = document.querySelector ("#celsius-link");
-  currentC.addEventListener ("click", showCurrentCelTemp);
 
   let maxTemp = Math.round(response.data.main.temp_max);
   let currentMaxTemp = document.querySelector ("#now-max-temp");

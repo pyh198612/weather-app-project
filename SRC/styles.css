@@ -28,23 +28,13 @@ input {
   margin: 20px auto;
 }
 
-a {
-  color: #fff;
-  text-decoration: none;
-  transform: all 200ms ease-in-out;
-}
-
-a:hover {
-  color: #1a508b;
-  text-decoration: underline;
-}
-
 h1,
 h3,
 footer,
 .col-2,
 .col-6,
-.main-session .temperature p {
+.main-session .temperature p,
+.main-session .temperature div {
   text-align: center;
 }
 
@@ -53,7 +43,8 @@ footer {
   color: #686d76;
 }
 
-.main-session p {
+.main-session p,
+.main-session div {
   line-height: 15px;
   color: #fff;
   font-size: 20px;
@@ -122,7 +113,7 @@ footer {
   color: #fff;
 }
 
-#now-weather-description {
+#now-weather-description::first-letter {
   text-transform: capitalize;
 }
 
