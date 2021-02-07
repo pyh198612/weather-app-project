@@ -1,21 +1,24 @@
 //Main session time
-function showCurrentDate (event) {
-  let date = currentTime.getDate (); 
+function showCurrentDate (timestamp) {
+  let time = new Date(timestamp);
+  let date = time.getDate (); 
   let conDate = ("0"+date).slice(-2);
-  let month = ("0"+(currentTime.getMonth()+1)).slice(-2);
-  let year = currentTime.getFullYear();
+  let month = ("0"+(time.getMonth()+1)).slice(-2);
+  let year = time.getFullYear();
   return `${conDate}.${month}.${year} Today`;
 }
 
-function showCurrentDay (event){
+function showCurrentDay (timestamp){
+  let time = new Date (timestamp);
   let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  let day = days [currentTime.getDay()]; 
+  let day = days [time.getDay()]; 
   return `${day}`;
 }
 
-function showCurrentTime (event) {
-  let hours = currentTime.getHours();
-  let minutes = currentTime.getMinutes ();
+function showCurrentTime (timestamp) {
+  let time = new Date (timestamp);
+  let hours = time.getHours();
+  let minutes = time.getMinutes ();
   let conMinutes = ("0" + minutes).slice(-2);
   if (hours >11 && hours !== 12) {
     let pmHours = hours - 12;
@@ -32,21 +35,11 @@ function showCurrentTime (event) {
   }
 }
 
-let currentTime = new Date (); 
 
-let todayDate = document.querySelector ("#main-session-date");
-todayDate.innerHTML = showCurrentDate (currentTime);
-
-let todayDay = document.querySelector ("#main-session-day");
-todayDay.innerHTML = showCurrentDay (currentTime);
-
-let todayTime = document.querySelector ("#main-session-time");
-todayTime.innerHTML = showCurrentTime (currentTime);
 
 //Main-session
 
 function showTemperature (response) {
-  console.log (response.data);
   let temperature = Math.round(response.data.main.temp); 
   let nowTemp = document.querySelector ("#current-temp");
   nowTemp.innerHTML = temperature; 
@@ -54,7 +47,7 @@ function showTemperature (response) {
   let maxTemperature = Math.round (response.data.main.temp_max);
   let nowMaxTemp = document.querySelector ("#now-max-temp");
   nowMaxTemp.innerHTML = maxTemperature; 
-
+  
   let minTemperature = Math.round (response.data.main.temp_min);
   let nowMinTemp = document.querySelector ("#now-min-temp");
   nowMinTemp.innerHTML = minTemperature; 
@@ -62,6 +55,15 @@ function showTemperature (response) {
   let description = response.data.weather[0].description; 
   let nowDescription = document.querySelector ("#now-weather-description");
   nowDescription.innerHTML = description; 
+  
+  let todayDate = document.querySelector ("#main-session-date");
+  todayDate.innerHTML = showCurrentDate (response.data.dt*1000);
+  
+  let todayDay = document.querySelector ("#main-session-day");
+  todayDay.innerHTML = showCurrentDay (response.data.dt*1000);
+  
+  let todayTime = document.querySelector ("#main-session-time");
+  todayTime.innerHTML = showCurrentTime (response.data.dt*1000);
   
 }
 
