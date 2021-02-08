@@ -1,6 +1,7 @@
 //Main session time
 function showCurrentDate (timestamp) {
   let time = new Date(timestamp);
+  //console.log(time);
   let date = time.getDate (); 
   let conDate = ("0"+date).slice(-2);
   let month = ("0"+(time.getMonth()+1)).slice(-2);
@@ -56,14 +57,17 @@ function showTemperature (response) {
   let nowDescription = document.querySelector ("#now-weather-description");
   nowDescription.innerHTML = description; 
   
+
+  let timestamp = response.data.dt;
+  let timezone = response.data.timezone;
+  let localTimestamp = timestamp + timezone;
+  let conLocalTimestamp = localTimestamp* 1000;
   let todayDate = document.querySelector ("#main-session-date");
-  todayDate.innerHTML = showCurrentDate (response.data.dt*1000);
-  
+  todayDate.innerHTML = showCurrentDate (conLocalTimestamp);
   let todayDay = document.querySelector ("#main-session-day");
-  todayDay.innerHTML = showCurrentDay (response.data.dt*1000);
-  
+  todayDay.innerHTML = showCurrentDay (conLocalTimestamp);
   let todayTime = document.querySelector ("#main-session-time");
-  todayTime.innerHTML = showCurrentTime (response.data.dt*1000);
+  todayTime.innerHTML = showCurrentTime (conLocalTimestamp);
   
 }
 
@@ -106,25 +110,6 @@ let searchEngine = document.querySelector ("#search-form");
 searchEngine.addEventListener ("submit", searchCity);
 
 // For Current button
-
-function showCurrentLocationTemp (response){
-  let temp = Math.round(response.data.main.temp);
-  let currentTemp = document.querySelector ("#current-temp");
-  currentTemp.innerHTML = temp; 
-
-  let maxTemp = Math.round(response.data.main.temp_max);
-  let currentMaxTemp = document.querySelector ("#now-max-temp");
-  currentMaxTemp.innerHTML = maxTemp; 
-
-  let minTemp = Math.round(response.data.main.temp_min);
-  let currentMinTemp = document.querySelector ("#now-min-temp");
-  currentMinTemp.innerHTML = minTemp; 
-
-  let descript = response.data.weather[0].description; 
-  let currentDescript = document.querySelector ("#now-weather-description");
-  currentDescript.innerHTML = descript; 
-}
-
 function getCurrentLocationName (response) {
   let currentLocationName = response.data[0].name;
   let h1Span = document.querySelector ("span");
@@ -148,7 +133,7 @@ function handleCurrentButton (event) {
     let apiLocationNameUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
     let apiPrecipitationUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=${excludes}&appid=${apiKey}&units=${units}`;
 
-    axios.get(apiLocationUrl).then(showCurrentLocationTemp);
+    axios.get(apiLocationUrl).then(showTemperature);
     axios.get(apiLocationNameUrl).then(getCurrentLocationName);
     axios.get(apiPrecipitationUrl).then(showCurrentPrecipitation);
 
