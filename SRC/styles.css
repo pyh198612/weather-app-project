@@ -68,6 +68,8 @@ footer {
 
 .main-session .main-image {
   width: 250px;
+  position: relative;
+  left: -20px;
 }
 
 .forecast-session .small-image {

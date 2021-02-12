@@ -1,7 +1,7 @@
 //Main session time
 function showCurrentDate (timestamp) {
   let time = new Date(timestamp);
-  //console.log(time);
+  console.log(time);
   let date = time.getDate (); 
   let conDate = ("0"+date).slice(-2);
   let month = ("0"+(time.getMonth()+1)).slice(-2);
@@ -41,6 +41,7 @@ function showCurrentTime (timestamp) {
 //Main-session
 
 function showTemperature (response) {
+//console.log(response.data);
   let temperature = Math.round(response.data.main.temp); 
   let nowTemp = document.querySelector ("#current-temp");
   nowTemp.innerHTML = temperature; 
@@ -59,6 +60,7 @@ function showTemperature (response) {
   
 
   let timestamp = response.data.dt;
+  console.log(timestamp);
   let timezone = response.data.timezone;
   let localTimestamp = timestamp + timezone;
   let conLocalTimestamp = localTimestamp* 1000;
@@ -69,12 +71,20 @@ function showTemperature (response) {
   let todayTime = document.querySelector ("#main-session-time");
   todayTime.innerHTML = showCurrentTime (conLocalTimestamp);
   
+  let mainIcon = document.querySelector ("#main-icon");
+  let iconCode = response.data.weather[0].icon;
+  if (iconCode === "02d") {
+    mainIcon.setAttribute ("src", `IMG/cloudy with sun_02d.png`); 
+  } else if (iconCode === "02n") {
+    mainIcon.setAttribute ("src", `IMG/few clouds_02n.png`)
+  }
+
 }
 
 
 function showCityPosition (response) {
   function showCityPrecipitation (response) {
-    let cityPrecipitation = (response.data.daily[0].pop)*100;
+    let cityPrecipitation = Math.round ((response.data.daily[0].pop)*100);
     let cityPrecipitationPercentage = document.querySelector ("#now-precipitation");
     cityPrecipitationPercentage.innerHTML = cityPrecipitation;
   }
