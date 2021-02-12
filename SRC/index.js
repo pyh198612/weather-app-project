@@ -1,7 +1,7 @@
 //Main session time
 function showCurrentDate (timestamp) {
   let time = new Date(timestamp);
-  console.log(time);
+  //console.log(time);
   let date = time.getDate (); 
   let conDate = ("0"+date).slice(-2);
   let month = ("0"+(time.getMonth()+1)).slice(-2);
@@ -41,7 +41,7 @@ function showCurrentTime (timestamp) {
 //Main-session
 
 function showTemperature (response) {
-//console.log(response.data);
+console.log(response.data);
   let temperature = Math.round(response.data.main.temp); 
   let nowTemp = document.querySelector ("#current-temp");
   nowTemp.innerHTML = temperature; 
@@ -60,7 +60,7 @@ function showTemperature (response) {
   
 
   let timestamp = response.data.dt;
-  console.log(timestamp);
+  //console.log(timestamp);
   let timezone = response.data.timezone;
   let localTimestamp = timestamp + timezone;
   let conLocalTimestamp = localTimestamp* 1000;
@@ -75,10 +75,41 @@ function showTemperature (response) {
   let iconCode = response.data.weather[0].icon;
   if (iconCode === "02d") {
     mainIcon.setAttribute ("src", `IMG/cloudy with sun_02d.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);
   } else if (iconCode === "02n") {
     mainIcon.setAttribute ("src", `IMG/few clouds_02n.png`)
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);
+  } else if (iconCode === "01d") {
+    mainIcon.setAttribute ("src", `IMG/sunny_01d.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);
+  } else if (iconCode === "01n") {
+    mainIcon.setAttribute ("src", `IMG/clear sky_01n.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);
+  } else if (iconCode === "03d" || iconCode === "03n"){
+    mainIcon.setAttribute ("src", `IMG/scattered clouds_03.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);
+  } else if (iconCode === "04d" || iconCode === "04n"){
+    mainIcon.setAttribute ("src", `IMG/broken clouds_04.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);    
+  } else if (iconCode === "09d" || iconCode === "09n"){
+    mainIcon.setAttribute ("src", `IMG/shower rain_09.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);   
+  } else if (iconCode === "10d"){ 
+    mainIcon.setAttribute ("src", `IMG/rain_10d.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);
+  } else if (iconCode === "10n"){ 
+    mainIcon.setAttribute ("src", `IMG/rain_10n.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);
+  } else if (iconCode === "11d" || iconCode === "11n"){
+    mainIcon.setAttribute ("src", `IMG/thunderstorm_11.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);   
+  } else if (iconCode === "13d" || iconCode === "13n"){
+    mainIcon.setAttribute ("src", `IMG/snow_13.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);   
+  } else if (iconCode === "50d" || iconCode === "50n"){
+    mainIcon.setAttribute ("src", `IMG/mist_50.png`); 
+    mainIcon.setAttribute ("alt", response.data.weather[0].description);   
   }
-
 }
 
 
@@ -102,8 +133,8 @@ function showCityPosition (response) {
 function searchCity (event) {
   event.preventDefault ();
   let cityInput = document.querySelector("#search-input");
-  let h1Span = document.querySelector ("span");
-  h1Span.innerHTML = `${cityInput.value}`;
+  let h1= document.querySelector ("h1");
+  h1.innerHTML = `${cityInput.value}`;
   
   let apiKey = "3cbad6f9a349042eb44901a3bdcb3200";
   let city = cityInput.value; 
@@ -122,8 +153,8 @@ searchEngine.addEventListener ("submit", searchCity);
 // For Current button
 function getCurrentLocationName (response) {
   let currentLocationName = response.data[0].name;
-  let h1Span = document.querySelector ("span");
-  h1Span.innerHTML = currentLocationName;
+  let h1 = document.querySelector ("h1");
+  h1.innerHTML = currentLocationName;
 }
 
 function showCurrentPrecipitation (response) {
@@ -146,9 +177,7 @@ function handleCurrentButton (event) {
     axios.get(apiLocationUrl).then(showTemperature);
     axios.get(apiLocationNameUrl).then(getCurrentLocationName);
     axios.get(apiPrecipitationUrl).then(showCurrentPrecipitation);
-
-}
-
+  }
 navigator.geolocation.getCurrentPosition (showPosition);
 }
 

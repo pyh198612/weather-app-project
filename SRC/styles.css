@@ -9,6 +9,7 @@ h3 {
   padding-bottom: 20px;
   font-weight: 800;
   color: #fff;
+  font-size: 35px;
 }
 
 h1 {
@@ -28,7 +29,6 @@ input {
   margin: 20px auto;
 }
 
-h1,
 h3,
 footer,
 .col-2,
@@ -50,10 +50,18 @@ footer {
   font-size: 20px;
 }
 
+.main-session .fa-location-arrow {
+  display: block;
+  text-align: center;
+  font-size: 35px;
+  position: relative;
+  top: -31px;
+  right: -22px;
+}
+
+h1,
 .main-session .time p {
   text-align: left;
-  position: relative;
-  left: 106px;
 }
 
 .main-session,
@@ -63,13 +71,14 @@ footer {
 
 .main-session {
   border-radius: 20px 20px 0 0;
-  padding: 13px 0;
+  padding: 0 0 22px 10px;
 }
 
 .main-session .main-image {
-  width: 250px;
+  width: 200px;
   position: relative;
   left: -20px;
+  bottom: -15px;
 }
 
 .forecast-session .small-image {
