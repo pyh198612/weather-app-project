@@ -2,7 +2,7 @@
 
 let apiKey = "3cbad6f9a349042eb44901a3bdcb3200";
 
-function showCurrentDate (timestamp) {
+function showDate (timestamp) {
   let time = new Date(timestamp);
   //console.log(time);
   let date = time.getDate (); 
@@ -10,17 +10,16 @@ function showCurrentDate (timestamp) {
   let month = ("0"+(time.getMonth()+1)).slice(-2);
   let year = time.getFullYear();
   return `${conDate}.${month}.${year}`;
-  //return `${formatDate(timestamp)} Today`;
 }
 
-function showCurrentDay (timestamp){
+function showDay (timestamp){
   let time = new Date (timestamp);
   let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   let day = days [time.getDay()]; 
   return `${day}`;
 }
 
-function showCurrentTime (timestamp) {
+function showTime (timestamp) {
   let time = new Date (timestamp);
   let hours = time.getHours();
   let minutes = time.getMinutes ();
@@ -65,11 +64,11 @@ console.log(response.data);
   let localTimestamp = timestamp + timezone;
   let conLocalTimestamp = localTimestamp* 1000;
   let todayDate = document.querySelector ("#main-session-date");
-  todayDate.innerHTML = showCurrentDate (conLocalTimestamp);
+  todayDate.innerHTML = showDate (conLocalTimestamp);
   let todayDay = document.querySelector ("#main-session-day");
-  todayDay.innerHTML = showCurrentDay (conLocalTimestamp);
+  todayDay.innerHTML = showDay (conLocalTimestamp);
   let todayTime = document.querySelector ("#main-session-time");
-  todayTime.innerHTML = showCurrentTime (conLocalTimestamp);
+  todayTime.innerHTML = showTime (conLocalTimestamp);
   
   let mainIcon = document.querySelector ("#main-icon");
   let iconCode = response.data.weather[0].icon;
@@ -112,44 +111,13 @@ console.log(response.data);
   }
 }
 
-
-function showCityPosition (response) {
-  function showCityPrecipitation (response) {
-    console.log (response.data);
-    let cityPrecipitation = Math.round ((response.data.daily[0].pop)*100);
-    let cityPrecipitationPercentage = document.querySelector ("#now-precipitation");
-    cityPrecipitationPercentage.innerHTML = cityPrecipitation;
-  }
+function showForecast (response){
+  let forecastElement = document.querySelector ("#forecast");
+  forecastElement.innerHTML = null;
+  let forecast = null;
   
-  function showMinMaxTemp (response){
-    let maxTemperature = Math.round (response.data.daily[0].temp.max);
-    let minTemperature = Math.round (response.data.daily[0].temp.min);
-    let nowMaxTemp = document.querySelector ("#now-max-temp");
-    let nowMinTemp = document.querySelector ("#now-min-temp");
-    nowMaxTemp.innerHTML = maxTemperature; 
-    nowMinTemp.innerHTML = minTemperature; 
-  }
-  
-  function forecastDate (timestamp) {
-    let forecastTime = new Date (timestamp);
-    //let forecastDate = ("0"+forecastTime.getDate()).slice(-2);
-    //let forecastMonth = ("0"+(forecastTime.getMonth()+1)).slice(-2);
-    //let forecastYear = forecastTime.getFullYear(); 
-    //return `${forecastDate}.${forecastMonth}.${forecastYear}`;
-    return `${showCurrentDate(timestamp)}`;
-  }
-
-  function forecastWeekday (timestamp) {
-    let forecastTime = new Date (timestamp);
-    //let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    //let forecastDay = days [forecastTime.getDay()]; 
-    return `${showCurrentDay(timestamp)}`;
-  }
-
-  function showForecast (response){
-    let forecastElement = document.querySelector ("#forecast");
-    let forecast = response.data.daily[1];
-    console.log (forecast);
+  for (let index = 1; index < 6; index ++) {
+    forecast = response.data.daily[index];
 
     let iconCode = forecast.weather[0].icon;
       if (iconCode === "02d") {
@@ -189,35 +157,51 @@ function showCityPosition (response) {
       forecastSrc = `IMG/mist_50.png`; 
       forecastAlt = forecast.weather[0].description;   
     }
-  
-    forecastElement.innerHTML = `
-    <p>
-      <div class="row align-items-center">
-        <div class="col-1"></div>
-        <div class="col-2">
-          ${forecastDate ((forecast.dt)*1000)}
-        </div>
-        <div class="col-2">
-          ${forecastWeekday ((forecast.dt)*1000)}
-        </div>
-        <div class="col-2">
-          <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
-        </div>
-        <div class="col-2">
-          ${Math.round(forecast.temp.min)}° / ${Math.round(forecast.temp.max)} °C
-        </div>
-        <div class="col-2">
-          <i class="fas fa-umbrella"></i> ${(forecast.pop)*100}% <br/>
-          <i class="fas fa-wind"></i> ${Math.round(forecast.wind_speed)} m/s
-        </div>
-        <div class="col-1"></div>
-      </div>
-    <p>
-    <hr />
-    `;
-  } 
 
-  
+  forecastElement.innerHTML += `
+  <p>
+    <div class="row align-items-center">
+      <div class="col-1"></div>
+      <div class="col-2">
+        ${showDate ((forecast.dt)*1000)}
+      </div>
+      <div class="col-2">
+        ${showDay ((forecast.dt)*1000)}
+      </div>
+      <div class="col-2">
+        <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
+      </div>
+      <div class="col-2">
+        ${Math.round(forecast.temp.min)}° / ${Math.round(forecast.temp.max)} °C
+      </div>
+      <div class="col-2">
+        <i class="fas fa-umbrella"></i> ${(forecast.pop)*100}% <br/>
+        <i class="fas fa-wind"></i> ${Math.round(forecast.wind_speed)} m/s
+      </div>
+      <div class="col-1"></div>
+    </div>
+  <p>
+  <hr />
+  `;
+  } 
+}
+
+function showCityPrecipitation (response) {
+  let cityPrecipitation = Math.round ((response.data.daily[0].pop)*100);
+  let cityPrecipitationPercentage = document.querySelector ("#now-precipitation");
+  cityPrecipitationPercentage.innerHTML = cityPrecipitation;
+}
+
+function showMinMaxTemp (response){
+  let maxTemperature = Math.round (response.data.daily[0].temp.max);
+  let minTemperature = Math.round (response.data.daily[0].temp.min);
+  let nowMaxTemp = document.querySelector ("#now-max-temp");
+  let nowMinTemp = document.querySelector ("#now-min-temp");
+  nowMaxTemp.innerHTML = maxTemperature; 
+  nowMinTemp.innerHTML = minTemperature; 
+}
+
+function showCityPosition (response) {
   let cityLon = response.data[0].lon;
   let cityLat = response.data[0].lat;
   let units = "metric";
@@ -256,12 +240,6 @@ function getCurrentLocationName (response) {
   h1.innerHTML = currentLocationName;
 }
 
-function showCurrentPrecipitation (response) {
-  let currentPrecipitation = (response.data.daily[0].pop)*100;
-  let currentPrecipitationPercentage = document.querySelector ("#now-precipitation");
-  currentPrecipitationPercentage.innerHTML=currentPrecipitation;
-} 
-
 function handleCurrentButton (event) {
   function showPosition (position) {
     let latitude = position.coords.latitude; 
@@ -270,11 +248,12 @@ function handleCurrentButton (event) {
     let excludes = "current,hourly,minutely,alerts";
     let apiLocationUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${units}`;
     let apiLocationNameUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
-    let apiPrecipitationUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=${excludes}&appid=${apiKey}&units=${units}`;
+    let apiOneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=${excludes}&appid=${apiKey}&units=${units}`;
 
     axios.get(apiLocationUrl).then(showTemperature);
     axios.get(apiLocationNameUrl).then(getCurrentLocationName);
-    axios.get(apiPrecipitationUrl).then(showCurrentPrecipitation);
+    axios.get(apiOneCallUrl).then(showCityPrecipitation);
+    axios.get(apiOneCallUrl).then(showForecast);
   }
 navigator.geolocation.getCurrentPosition (showPosition);
 }
