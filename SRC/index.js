@@ -116,7 +116,7 @@ function showForecast (response){
   forecastElement.innerHTML = null;
   let forecast = null;
   
-  for (let index = 1; index < 6; index ++) {
+  for (let index = 1; index < 5; index ++) {
     forecast = response.data.daily[index];
 
     let iconCode = forecast.weather[0].icon;
@@ -159,8 +159,9 @@ function showForecast (response){
     }
 
   forecastElement.innerHTML += `
-  <p>
-    <div class="row align-items-center">
+   
+   <p>
+     <div class="row align-items-center">
       <div class="col-1"></div>
       <div class="col-2">
         ${showDate ((forecast.dt)*1000)}
@@ -179,12 +180,79 @@ function showForecast (response){
         <i class="fas fa-wind"></i> ${Math.round(forecast.wind_speed)} m/s
       </div>
       <div class="col-1"></div>
-    </div>
-  <p>
-  <hr />
+     </div>
+    </p>
+  <hr/>
   `;
   } 
-}
+
+  lastForecast = response.data.daily[5];
+  console.log(lastForecast);
+    let iconCode = lastForecast.weather[0].icon;
+      if (iconCode === "02d") {
+      forecastSrc = `IMG/cloudy with sun_02d.png`; 
+      forecastAlt = lastForecast.weather[0].description;
+    } else if (iconCode === "02n") {
+      forecastSrc = `IMG/few clouds_02n.png`;
+      forecastAlt =lastForecast.weather[0].description;
+    } else if (iconCode === "01d") {
+      forecastSrc = `IMG/sunny_01d.png`; 
+      forecastAlt =lastForecast.weather[0].description;
+    } else if (iconCode === "01n") {
+      forecastSrc = `IMG/clear sky_01n.png`; 
+      forecastAlt =lastForecast.weather[0].description;
+    } else if (iconCode === "03d" || iconCode === "03n"){
+      forecastSrc = `IMG/scattered clouds_03.png`; 
+      forecastAlt =lastForecast.weather[0].description;
+    } else if (iconCode === "04d" || iconCode === "04n"){
+      forecastSrc = `IMG/broken clouds_04.png`; 
+      forecastAlt = lastForecast.weather[0].description;    
+    } else if (iconCode === "09d" || iconCode === "09n"){
+      forecastSrc = `IMG/shower rain_09.png`; 
+      forecastAlt = flastForecast.weather[0].description;   
+    } else if (iconCode === "10d"){ 
+      forecastSrc = `IMG/rain_10d.png`; 
+      forecastAlt = lastForecast.weather[0].description;
+    } else if (iconCode === "10n"){ 
+      forecastSrc = `IMG/rain_10n.png`; 
+      forecastAlt = lastForecast.weather[0].description;
+    } else if (iconCode === "11d" || iconCode === "11n"){
+      forecastSrc = `IMG/thunderstorm_11.png`; 
+      forecastAlt = flastForecast.weather[0].description;   
+    } else if (iconCode === "13d" || iconCode === "13n"){
+      forecastSrc = `IMG/snow_13.png`; 
+      forecastAlt = lastForecast.weather[0].description;   
+    } else if (iconCode === "50d" || iconCode === "50n"){
+      forecastSrc = `IMG/mist_50.png`; 
+      forecastAlt = lastForecast.weather[0].description;   
+    }
+
+  forecastElement.innerHTML += `
+   <p>
+     <div class="row align-items-center">
+      <div class="col-1"></div>
+      <div class="col-2">
+        ${showDate ((lastForecast.dt)*1000)}
+      </div>
+      <div class="col-2">
+        ${showDay ((lastForecast.dt)*1000)}
+      </div>
+      <div class="col-2">
+        <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
+      </div>
+      <div class="col-2">
+        ${Math.round(lastForecast.temp.min)}° / ${Math.round(lastForecast.temp.max)} °C
+      </div>
+      <div class="col-2">
+        <i class="fas fa-umbrella"></i> ${(lastForecast.pop)*100}% <br/>
+        <i class="fas fa-wind"></i> ${Math.round(lastForecast.wind_speed)} m/s
+      </div>
+      <div class="col-1"></div>
+     </div>
+    </p>
+  `;
+  } 
+
 
 function showCityPrecipitation (response) {
   let cityPrecipitation = Math.round ((response.data.daily[0].pop)*100);
