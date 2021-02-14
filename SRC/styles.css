@@ -64,6 +64,28 @@ h1,
   text-align: left;
 }
 
+.form-check {
+  min-height: 2rem;
+}
+
+.form-check .form-check-input {
+  float: right;
+  position: relative;
+  left: -130px;
+}
+
+.form-check-input:checked {
+  background-color: #6f86d6;
+  border-color: #686d76;
+}
+
+.form-check .form-check-label {
+  float: right;
+  position: relative;
+  left: -20px;
+  color: #686d76;
+}
+
 .main-session,
 .search-session {
   background-image: linear-gradient(to top, #48c6ef 0%, #6f86d6 100%);

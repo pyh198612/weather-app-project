@@ -44,7 +44,9 @@ function showTime (timestamp) {
 
 function showTemperature (response) {
 //console.log(response.data);
-  let temperature = Math.round(response.data.main.temp); 
+  celsiusTemperature = response.data.main.temp;
+
+  let temperature = Math.round(celsiusTemperature); 
   let nowTemp = document.querySelector ("#current-temp");
   nowTemp.innerHTML = temperature; 
   
@@ -52,7 +54,7 @@ function showTemperature (response) {
   let nowDescription = document.querySelector ("#now-weather-description");
   nowDescription.innerHTML = description; 
 
-  let windSpeed = Math.round(response.data.wind.speed);
+  let windSpeed = Math.round(response.data.wind.speed *3600/1000);
   let nowWindSpeed = document.querySelector ("#wind-speed");
   nowWindSpeed.innerHTML = windSpeed;
   
@@ -63,6 +65,8 @@ function showTemperature (response) {
   //console.log (dateFormat);
   //let unixDate = new Date (dateFormat).toUTCString();
   //console.log (unixDate);
+  //let unixTimestamp = unixDate.getTime();
+  //console.log(unixTimestamp);
   
 
   let timezone = response.data.timezone;
@@ -121,11 +125,12 @@ function showForecast (response){
   forecastElement.innerHTML = null;
   let forecast = null;
   
+  
   for (let index = 1; index < 5; index ++) {
     forecast = response.data.daily[index];
-
+    
     let iconCode = forecast.weather[0].icon;
-      if (iconCode === "02d") {
+    if (iconCode === "02d") {
       forecastSrc = `IMG/cloudy with sun_02d.png`; 
       forecastAlt = forecast.weather[0].description;
     } else if (iconCode === "02n") {
@@ -162,15 +167,14 @@ function showForecast (response){
       forecastSrc = `IMG/mist_50.png`; 
       forecastAlt = forecast.weather[0].description;   
     }
-
-  forecastElement.innerHTML += `
-   
-   <p>
+    
+    forecastElement.innerHTML += `
+    <p>
      <div class="row align-items-center">
-      <div class="col-1"></div>
+     <div class="col-1"></div>
       <div class="col-2">
         ${showDate ((forecast.dt)*1000)}
-      </div>
+        </div>
       <div class="col-2">
         ${showDay ((forecast.dt)*1000)}
       </div>
@@ -178,23 +182,23 @@ function showForecast (response){
         <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
       </div>
       <div class="col-2">
-        ${Math.round(forecast.temp.min)}° / ${Math.round(forecast.temp.max)} °C
+        ${Math.round(forecast.temp.min)}° / ${Math.round(forecast.temp.max)} ° C 
       </div>
       <div class="col-2">
         <i class="fas fa-umbrella"></i> ${Math.round(forecast.pop)*100}% <br/>
-        <i class="fas fa-wind"></i> ${Math.round(forecast.wind_speed)} m/s
+        <i class="fas fa-wind"></i> ${Math.round(forecast.wind_speed*3600/1000)} km/h
       </div>
       <div class="col-1"></div>
      </div>
-    </p>
-  <hr/>
-  `;
-  } 
-
-  lastForecast = response.data.daily[5];
+     </p>
+     <hr/>
+     `;
+    } 
+    
+    lastForecast = response.data.daily[5];
     let iconCode = lastForecast.weather[0].icon;
       if (iconCode === "02d") {
-      forecastSrc = `IMG/cloudy with sun_02d.png`; 
+        forecastSrc = `IMG/cloudy with sun_02d.png`; 
       forecastAlt = lastForecast.weather[0].description;
     } else if (iconCode === "02n") {
       forecastSrc = `IMG/few clouds_02n.png`;
@@ -230,9 +234,10 @@ function showForecast (response){
       forecastSrc = `IMG/mist_50.png`; 
       forecastAlt = lastForecast.weather[0].description;   
     }
-
-  forecastElement.innerHTML += `
-   <p>
+    
+    
+    forecastElement.innerHTML += `
+    <p>
      <div class="row align-items-center">
       <div class="col-1"></div>
       <div class="col-2">
@@ -245,11 +250,11 @@ function showForecast (response){
         <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
       </div>
       <div class="col-2">
-        ${Math.round(lastForecast.temp.min)}° / ${Math.round(lastForecast.temp.max)} °C
+        ${Math.round(lastForecast.temp.min)} ° / ${Math.round(lastForecast.temp.max)} ° C
       </div>
       <div class="col-2">
         <i class="fas fa-umbrella"></i> ${(lastForecast.pop)*100}% <br/>
-        <i class="fas fa-wind"></i> ${Math.round(lastForecast.wind_speed)} m/s
+        <i class="fas fa-wind"></i> ${Math.round(lastForecast.wind_speed*3600/1000)} km/h
       </div>
       <div class="col-1"></div>
      </div>
@@ -265,8 +270,10 @@ function showCityPrecipitation (response) {
 }
 
 function showMinMaxTemp (response){
-  let maxTemperature = Math.round (response.data.daily[0].temp.max);
-  let minTemperature = Math.round (response.data.daily[0].temp.min);
+  celsiusMinTemp = response.data.daily[0].temp.min;
+  celsiusMaxTemp = response.data.daily[0].temp.max;
+  let maxTemperature = Math.round (celsiusMaxTemp);
+  let minTemperature = Math.round (celsiusMinTemp);
   let nowMaxTemp = document.querySelector ("#now-max-temp");
   let nowMinTemp = document.querySelector ("#now-min-temp");
   nowMaxTemp.innerHTML = maxTemperature; 
@@ -332,5 +339,51 @@ navigator.geolocation.getCurrentPosition (showPosition);
 
 let currentButton = document.querySelector (".current-button");
 currentButton.addEventListener ("click", handleCurrentButton);
+
+
+
+
+function handleCheckBoxFahrenheit (event) {
+  let currentTemp=document.querySelector ("#current-temp");
+  if (this.checked) {
+  let fahreinheitTemp = (celsiusTemperature* 9)/5 + 32;
+  currentTemp.innerHTML = Math.round (fahreinheitTemp);
+  let tempUnitChange = document.querySelector (".temp-unit");
+  tempUnitChange.innerHTML = `F`;
+  } else {
+    currentTemp.innerHTML = Math.round (celsiusTemperature);
+    let tempUnitChange = document.querySelector (".temp-unit");
+  tempUnitChange.innerHTML = `C`;
+  }
+
+  let minTemp = document.querySelector (".min-temp");
+  if (this.checked) {
+  let fahreinheitMinTemp = (celsiusMinTemp * 9)/5 + 32;
+  minTemp.innerHTML = Math.round (fahreinheitMinTemp);
+  } else {
+    minTemp.innerHTML = Math.round (celsiusMinTemp);
+  }
+
+  let maxTemp=document.querySelector (".max-temp");
+  if (this.checked) {
+  let fahreinheitMaxTemp = (celsiusMaxTemp * 9)/5 + 32;
+  maxTemp.innerHTML = Math.round (fahreinheitMaxTemp);
+  let tempUnitChange = document.querySelector (".max-temp-unit");
+  tempUnitChange.innerHTML = `F`;
+  } else {
+    maxTemp.innerHTML = Math.round (celsiusMaxTemp);
+    let tempUnitChange = document.querySelector (".max-temp-unit");
+  tempUnitChange.innerHTML = `C`;
+  }
+
+}
+
+let celsiusTemperature = null;
+let celsiusMinTemp = null;
+let celsiusMaxTemp = null;
+
+
+let checkBox = document.querySelector ("#check-box");
+checkBox.addEventListener ("change", handleCheckBoxFahrenheit);
 
 
