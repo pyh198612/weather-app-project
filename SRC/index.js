@@ -59,10 +59,10 @@ function showTemperature (response) {
   
   let timestamp = response.data.dt;
   console.log(timestamp);
-  let dateFormat = new Date (timestamp*1000);
-  console.log (dateFormat);
-  let unixDate = new Date (dateFormat).toUTCString();
-  console.log (unixDate);
+  //let dateFormat = new Date (timestamp*1000);
+  //console.log (dateFormat);
+  //let unixDate = new Date (dateFormat).toUTCString();
+  //console.log (unixDate);
   
 
   let timezone = response.data.timezone;
@@ -181,7 +181,7 @@ function showForecast (response){
         ${Math.round(forecast.temp.min)}° / ${Math.round(forecast.temp.max)} °C
       </div>
       <div class="col-2">
-        <i class="fas fa-umbrella"></i> ${(forecast.pop)*100}% <br/>
+        <i class="fas fa-umbrella"></i> ${Math.round(forecast.pop)*100}% <br/>
         <i class="fas fa-wind"></i> ${Math.round(forecast.wind_speed)} m/s
       </div>
       <div class="col-1"></div>
