@@ -4,7 +4,6 @@ let apiKey = "3cbad6f9a349042eb44901a3bdcb3200";
 
 function showDate (timestamp) {
   let time = new Date(timestamp);
-  //console.log(time);
   let date = time.getDate (); 
   let conDate = ("0"+date).slice(-2);
   let month = ("0"+(time.getMonth()+1)).slice(-2);
@@ -44,7 +43,7 @@ function showTime (timestamp) {
 //Main-session
 
 function showTemperature (response) {
-console.log(response.data);
+//console.log(response.data);
   let temperature = Math.round(response.data.main.temp); 
   let nowTemp = document.querySelector ("#current-temp");
   nowTemp.innerHTML = temperature; 
@@ -59,10 +58,16 @@ console.log(response.data);
   
   
   let timestamp = response.data.dt;
-  //console.log(timestamp);
+  console.log(timestamp);
+  let dateFormat = new Date (timestamp*1000);
+  console.log (dateFormat);
+  let unixDate = new Date (dateFormat).toUTCString();
+  console.log (unixDate);
+  
+
   let timezone = response.data.timezone;
   let localTimestamp = timestamp + timezone;
-  let conLocalTimestamp = localTimestamp* 1000;
+  let conLocalTimestamp = localTimestamp*1000;
   let todayDate = document.querySelector ("#main-session-date");
   todayDate.innerHTML = showDate (conLocalTimestamp);
   let todayDay = document.querySelector ("#main-session-day");
@@ -187,7 +192,6 @@ function showForecast (response){
   } 
 
   lastForecast = response.data.daily[5];
-  console.log(lastForecast);
     let iconCode = lastForecast.weather[0].icon;
       if (iconCode === "02d") {
       forecastSrc = `IMG/cloudy with sun_02d.png`; 
@@ -328,6 +332,5 @@ navigator.geolocation.getCurrentPosition (showPosition);
 
 let currentButton = document.querySelector (".current-button");
 currentButton.addEventListener ("click", handleCurrentButton);
-
 
 
