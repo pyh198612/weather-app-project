@@ -60,12 +60,12 @@ function showTemperature (response) {
   
   
   let timestamp = response.data.dt;
-  console.log(timestamp);
+  //console.log(timestamp);
   //let dateFormat = new Date (timestamp*1000);
   //console.log (dateFormat);
   //let unixDate = new Date (dateFormat).toUTCString();
   //console.log (unixDate);
-  //let unixTimestamp = unixDate.getTime();
+  //let unixTimestamp = unixDate.getMilliseconds();
   //console.log(unixTimestamp);
   
 
@@ -333,6 +333,7 @@ function handleCurrentButton (event) {
     axios.get(apiLocationNameUrl).then(getCurrentLocationName);
     axios.get(apiOneCallUrl).then(showCityPrecipitation);
     axios.get(apiOneCallUrl).then(showForecast);
+    axios.get(apiOneCallUrl).then(showMinMaxTemp);
   }
 navigator.geolocation.getCurrentPosition (showPosition);
 }
