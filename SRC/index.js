@@ -3,7 +3,7 @@
 let apiKey = "3cbad6f9a349042eb44901a3bdcb3200";
 
 function showDate (timestamp) {
-  let time = new Date(timestamp);
+  let time = new Date(timestamp*1000);
   let date = time.getDate (); 
   let conDate = ("0"+date).slice(-2);
   let month = ("0"+(time.getMonth()+1)).slice(-2);
@@ -12,14 +12,14 @@ function showDate (timestamp) {
 }
 
 function showDay (timestamp){
-  let time = new Date (timestamp);
+  let time = new Date (timestamp*1000);
   let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   let day = days [time.getDay()]; 
   return `${day}`;
 }
 
 function showTime (timestamp) {
-  let time = new Date (timestamp);
+  let time = new Date (timestamp*1000);
   let hours = time.getHours();
   let minutes = time.getMinutes ();
   let conMinutes = ("0" + minutes).slice(-2);
@@ -60,18 +60,12 @@ function showTemperature (response) {
   
   
   let timestamp = response.data.dt;
-  //console.log(timestamp);
-  //let dateFormat = new Date (timestamp*1000);
-  //console.log (dateFormat);
-  //let unixDate = new Date (dateFormat).toUTCString();
-  //console.log (unixDate);
-  //let unixTimestamp = unixDate.getMilliseconds();
-  //console.log(unixTimestamp);
-  
-
+  let d = new Date (timestamp);
+  let localTime = d.getTime ();
+  let localOffset = d.getTimezoneOffset ()*60;
+  let utc = localTime + localOffset;
   let timezone = response.data.timezone;
-  let localTimestamp = timestamp + timezone;
-  let conLocalTimestamp = localTimestamp*1000;
+  let conLocalTimestamp = utc+timezone;
   let todayDate = document.querySelector ("#main-session-date");
   todayDate.innerHTML = showDate (conLocalTimestamp);
   let todayDay = document.querySelector ("#main-session-day");
@@ -168,21 +162,27 @@ function showForecast (response){
       forecastAlt = forecast.weather[0].description;   
     }
     
+    
+    celsiusForecastMinTemp = forecast.temp.min;
+    celsiusForecastMaxTemp = forecast.temp.max;
+    
     forecastElement.innerHTML += `
     <p>
-     <div class="row align-items-center">
-     <div class="col-1"></div>
+    <div class="row align-items-center">
+    <div class="col-1"></div>
       <div class="col-2">
-        ${showDate ((forecast.dt)*1000)}
+        ${showDate (forecast.dt)}
         </div>
       <div class="col-2">
-        ${showDay ((forecast.dt)*1000)}
+        ${showDay (forecast.dt)}
       </div>
       <div class="col-2">
         <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
       </div>
       <div class="col-2">
-        ${Math.round(forecast.temp.min)}° / ${Math.round(forecast.temp.max)} ° C 
+        <span class = "forecast-min-temp"> ${Math.round(celsiusForecastMinTemp)} </span> ° / 
+        <span class="forecast-max-temp">${Math.round(celsiusForecastMaxTemp)}</span> ° 
+        <span class="forecast-max-temp-unit"> C </span> 
       </div>
       <div class="col-2">
         <i class="fas fa-umbrella"></i> ${Math.round(forecast.pop)*100}% <br/>
@@ -235,38 +235,42 @@ function showForecast (response){
       forecastAlt = lastForecast.weather[0].description;   
     }
     
+    celsiusLastForecastMinTemp = lastForecast.temp.min;
+    celsiusLastForecastMaxTemp = lastForecast.temp.max;
     
     forecastElement.innerHTML += `
     <p>
      <div class="row align-items-center">
       <div class="col-1"></div>
       <div class="col-2">
-        ${showDate ((lastForecast.dt)*1000)}
+        ${showDate (lastForecast.dt)}
       </div>
       <div class="col-2">
-        ${showDay ((lastForecast.dt)*1000)}
+        ${showDay (lastForecast.dt)}
       </div>
       <div class="col-2">
         <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
       </div>
       <div class="col-2">
-        ${Math.round(lastForecast.temp.min)} ° / ${Math.round(lastForecast.temp.max)} ° C
+        <span class="last-forecast-min-temp"> ${Math.round(celsiusLastForecastMinTemp)} </span> ° / 
+        <span class="last-forecast-max-temp"> ${Math.round(celsiusLastForecastMaxTemp)} </span> ° 
+        <span class="last-forecast-max-temp-unit"> C </span>
       </div>
       <div class="col-2">
         <i class="fas fa-umbrella"></i> ${(lastForecast.pop)*100}% <br/>
         <i class="fas fa-wind"></i> ${Math.round(lastForecast.wind_speed*3600/1000)} km/h
-      </div>
-      <div class="col-1"></div>
-     </div>
-    </p>
-  `;
-  } 
-
-
+        </div>
+        <div class="col-1"></div>
+        </div>
+        </p>
+        `;
+  }
+        
+        
 function showCityPrecipitation (response) {
-  let cityPrecipitation = Math.round ((response.data.daily[0].pop)*100);
-  let cityPrecipitationPercentage = document.querySelector ("#now-precipitation");
-  cityPrecipitationPercentage.innerHTML = cityPrecipitation;
+let cityPrecipitation = Math.round ((response.data.daily[0].pop)*100);
+let cityPrecipitationPercentage = document.querySelector ("#now-precipitation");
+cityPrecipitationPercentage.innerHTML = cityPrecipitation;
 }
 
 function showMinMaxTemp (response){
@@ -286,7 +290,7 @@ function showCityPosition (response) {
   let units = "metric";
   let excludes = "current,hourly,minutely,alerts";
   let apiOneCallUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&exclude=${excludes}&appid=${apiKey}&units=${units}`;
-
+  
   axios.get(apiOneCallUrl).then(showCityPrecipitation);
   axios.get(apiOneCallUrl).then(showMinMaxTemp);
   axios.get(apiOneCallUrl).then (showForecast);
@@ -302,10 +306,10 @@ function searchCity (event) {
   let units = "metric";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
   axios.get(apiUrl).then(showTemperature);
-
+  
   let apiGeocodingUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityInput.value}&appid=${apiKey}`;
   axios.get(apiGeocodingUrl).then (showCityPosition);
-
+  
 }
 
 
@@ -335,11 +339,13 @@ function handleCurrentButton (event) {
     axios.get(apiOneCallUrl).then(showForecast);
     axios.get(apiOneCallUrl).then(showMinMaxTemp);
   }
-navigator.geolocation.getCurrentPosition (showPosition);
+  navigator.geolocation.getCurrentPosition (showPosition);
 }
 
 let currentButton = document.querySelector (".current-button");
 currentButton.addEventListener ("click", handleCurrentButton);
+
+
 
 
 
@@ -366,6 +372,7 @@ function handleCheckBoxFahrenheit (event) {
   }
 
   let maxTemp=document.querySelector (".max-temp");
+  console.log (maxTemp);
   if (this.checked) {
   let fahreinheitMaxTemp = (celsiusMaxTemp * 9)/5 + 32;
   maxTemp.innerHTML = Math.round (fahreinheitMaxTemp);
@@ -377,14 +384,60 @@ function handleCheckBoxFahrenheit (event) {
   tempUnitChange.innerHTML = `C`;
   }
 
+  for (let index = 1; index < 5; index ++) {
+  let forecastMinTemp = document.querySelector (".forecast-min-temp");
+  console.log (forecastMinTemp);
+  if (this.checked) {
+    let forecastFahMinTemp = (celsiusForecastMinTemp*9)/5+32;
+    forecastMinTemp.innerHTML = Math.round (forecastFahMinTemp);
+  } else {
+    forecastMinTemp.innerHTML = Math.round (celsiusForecastMinTemp);
+  }
+
+  let forecastMaxTemp = document.querySelector (".forecast-max-temp");
+  if (this.checked) {
+    let forecastFahMaxTemp = (celsiusForecastMaxTemp*9)/5+32;
+    forecastMaxTemp.innerHTML = Math.round (forecastFahMaxTemp);
+    let forecastTempUnitChange = document.querySelector (".forecast-max-temp-unit");
+    forecastTempUnitChange.innerHTML = `F`;
+  } else {
+    forecastMaxTemp.innerHTML = Math.round (celsiusForecastMaxTemp);
+    let forecastTempUnitChange = document.querySelector (".forecast-max-temp-unit");
+    forecastTempUnitChange.innerHTML = `C`;
+  }
+  }
+
+  let lastForecastMinTemp = document.querySelector (".last-forecast-min-temp");
+  if (this.checked) {
+    let lastForecastFahMinTemp = (celsiusLastForecastMinTemp*9)/5+32;
+    lastForecastMinTemp.innerHTML = Math.round (lastForecastFahMinTemp);
+  } else {
+    lastForecastMinTemp.innerHTML = Math.round (celsiusLastForecastMinTemp);
+  }
+
+  let lastForecastMaxTemp = document.querySelector (".last-forecast-max-temp");
+  if (this.checked) {
+    let lastForecastFahMaxTemp = (celsiusLastForecastMaxTemp*9)/5+32;
+    lastForecastMaxTemp.innerHTML = Math.round (lastForecastFahMaxTemp);
+    let lastForecastTempUnitChange = document.querySelector (".last-forecast-max-temp-unit");
+    lastForecastTempUnitChange.innerHTML = `F`;
+  } else {
+    lastForecastMaxTemp.innerHTML = Math.round (celsiusLastForecastMaxTemp);
+    let lastForecastTempUnitChange = document.querySelector (".last-forecast-max-temp-unit");
+    lastForecastTempUnitChange.innerHTML = `C`;
+  }
 }
 
 let celsiusTemperature = null;
 let celsiusMinTemp = null;
 let celsiusMaxTemp = null;
+let celsiusForecastMinTemp = null;
+let celsiusForecastMaxTemp = null;
+let celsiusLastForecastMinTemp = null;
+let celsiusLastForecastMaxTemp = null;
+    
 
 
 let checkBox = document.querySelector ("#check-box");
 checkBox.addEventListener ("change", handleCheckBoxFahrenheit);
-
 
