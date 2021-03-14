@@ -351,6 +351,8 @@ currentButton.addEventListener ("click", handleCurrentButton);
 
 
 function handleCheckBoxFahrenheit (event) {
+  //Current weather//
+
   let currentTemp=document.querySelector ("#current-temp");
   if (this.checked) {
   let fahreinheitTemp = (celsiusTemperature* 9)/5 + 32;
@@ -372,7 +374,6 @@ function handleCheckBoxFahrenheit (event) {
   }
 
   let maxTemp=document.querySelector (".max-temp");
-  console.log (maxTemp);
   if (this.checked) {
   let fahreinheitMaxTemp = (celsiusMaxTemp * 9)/5 + 32;
   maxTemp.innerHTML = Math.round (fahreinheitMaxTemp);
@@ -384,9 +385,9 @@ function handleCheckBoxFahrenheit (event) {
   tempUnitChange.innerHTML = `C`;
   }
 
-  for (let index = 1; index < 5; index ++) {
+
+  // Forecast 1 to 4
   let forecastMinTemp = document.querySelector (".forecast-min-temp");
-  console.log (forecastMinTemp);
   if (this.checked) {
     let forecastFahMinTemp = (celsiusForecastMinTemp*9)/5+32;
     forecastMinTemp.innerHTML = Math.round (forecastFahMinTemp);
@@ -405,7 +406,9 @@ function handleCheckBoxFahrenheit (event) {
     let forecastTempUnitChange = document.querySelector (".forecast-max-temp-unit");
     forecastTempUnitChange.innerHTML = `C`;
   }
-  }
+
+
+  //last forecast
 
   let lastForecastMinTemp = document.querySelector (".last-forecast-min-temp");
   if (this.checked) {
