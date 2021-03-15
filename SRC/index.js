@@ -387,24 +387,43 @@ function handleCheckBoxFahrenheit (event) {
 
 
   // Forecast 1 to 4
-  let forecastMinTemp = document.querySelector (".forecast-min-temp");
-  if (this.checked) {
-    let forecastFahMinTemp = (celsiusForecastMinTemp*9)/5+32;
-    forecastMinTemp.innerHTML = Math.round (forecastFahMinTemp);
-  } else {
-    forecastMinTemp.innerHTML = Math.round (celsiusForecastMinTemp);
-  }
-
-  let forecastMaxTemp = document.querySelector (".forecast-max-temp");
-  if (this.checked) {
-    let forecastFahMaxTemp = (celsiusForecastMaxTemp*9)/5+32;
-    forecastMaxTemp.innerHTML = Math.round (forecastFahMaxTemp);
-    let forecastTempUnitChange = document.querySelector (".forecast-max-temp-unit");
-    forecastTempUnitChange.innerHTML = `F`;
-  } else {
-    forecastMaxTemp.innerHTML = Math.round (celsiusForecastMaxTemp);
-    let forecastTempUnitChange = document.querySelector (".forecast-max-temp-unit");
-    forecastTempUnitChange.innerHTML = `C`;
+  let checked = this.checked;
+  
+  let forecastMinTemp = document.querySelectorAll (".forecast-min-temp");
+  forecastMinTemp.forEach (convertMin);
+  function convertMin (item) {
+    let currentTemp = item.innerHTML;
+    if (checked) {
+      let forecastFahMinTemp = (currentTemp*9)/5+32;
+      //console.log (forecastFahMinTemp);
+      item.innerHTML = Math.round (forecastFahMinTemp);
+    
+    } else {
+      let returnCelMinTemp = (currentTemp - 32)*5/9;
+      //console.log (returnCelMinTemp);
+      item.innerHTML = Math.round (returnCelMinTemp);
+     
+    }
+    
+  let forecastMaxTemp = document.querySelectorAll (".forecast-max-temp");
+  forecastMaxTemp.forEach(convertMax);
+  function convertMax (item) {
+      let currentTemp = item.innerHTML;
+      console.log (currentTemp);
+      if (checked) {
+        let forecastFahMaxTemp = (currentTemp*9)/5+32;
+        //console.log (forecastFahMaxTemp);
+        item.innerHTML = Math.round (forecastFahMaxTemp);
+        let forecastTempUnitChange = document.querySelector (".forecast-max-temp-unit");
+        forecastTempUnitChange.innerHTML = `F`;
+      } else {
+        let returnCelMaxTemp = (currentTemp - 32)*5/9;
+        //console.log (returnCelMaxTemp);
+        item.innerHTML = Math.round (returnCelMaxTemp);
+        let forecastTempUnitChange = document.querySelector(".forecast-max-temp-unit");
+        forecastTempUnitChange.innerHTML = `C`;
+      }
+    }
   }
 
 
