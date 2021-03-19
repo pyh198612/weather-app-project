@@ -393,39 +393,45 @@ function handleCheckBoxFahrenheit (event) {
   forecastMinTemp.forEach (convertMin);
   function convertMin (item) {
     let currentTemp = item.innerHTML;
+    // to grab the current value to convert
     if (checked) {
       let forecastFahMinTemp = (currentTemp*9)/5+32;
-      //console.log (forecastFahMinTemp);
       item.innerHTML = Math.round (forecastFahMinTemp);
     
     } else {
-      let returnCelMinTemp = (currentTemp - 32)*5/9;
-      //console.log (returnCelMinTemp);
+      let returnCelMinTemp = ((currentTemp - 32)*5)/9;
       item.innerHTML = Math.round (returnCelMinTemp);
      
     }
+  }  
     
   let forecastMaxTemp = document.querySelectorAll (".forecast-max-temp");
   forecastMaxTemp.forEach(convertMax);
   function convertMax (item) {
       let currentTemp = item.innerHTML;
-      console.log (currentTemp);
       if (checked) {
         let forecastFahMaxTemp = (currentTemp*9)/5+32;
-        //console.log (forecastFahMaxTemp);
         item.innerHTML = Math.round (forecastFahMaxTemp);
-        let forecastTempUnitChange = document.querySelector (".forecast-max-temp-unit");
-        forecastTempUnitChange.innerHTML = `F`;
+        //let forecastTempUnitChange = document.querySelector (".forecast-max-temp-unit");
+        //forecastTempUnitChange.innerHTML = `F`;
       } else {
-        let returnCelMaxTemp = (currentTemp - 32)*5/9;
-        //console.log (returnCelMaxTemp);
+        let returnCelMaxTemp = ((currentTemp - 32))*5/9;
         item.innerHTML = Math.round (returnCelMaxTemp);
-        let forecastTempUnitChange = document.querySelector(".forecast-max-temp-unit");
-        forecastTempUnitChange.innerHTML = `C`;
+        //let forecastTempUnitChange = document.querySelector(".forecast-max-temp-unit");
+        //forecastTempUnitChange.innerHTML = `C`;
       }
     }
-  }
 
+  let forecastTempUnitChange = document.querySelectorAll (".forecast-max-temp-unit");
+  forecastTempUnitChange.forEach (convertUnit);
+  function convertUnit (item) {
+      if (checked) {
+      item.innerHTML = `F`;
+     } else {
+      item.innerHTML = `C`;
+     }
+    }
+  
 
   //last forecast
 
