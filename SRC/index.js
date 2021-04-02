@@ -3,7 +3,7 @@
 let apiKey = "3cbad6f9a349042eb44901a3bdcb3200";
 
 function showDate (timestamp) {
-  let time = new Date(timestamp*1000);
+  let time = new Date(timestamp);
   let date = time.getDate (); 
   let conDate = ("0"+date).slice(-2);
   let month = ("0"+(time.getMonth()+1)).slice(-2);
@@ -12,14 +12,14 @@ function showDate (timestamp) {
 }
 
 function showDay (timestamp){
-  let time = new Date (timestamp*1000);
+  let time = new Date (timestamp);
   let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   let day = days [time.getDay()]; 
   return `${day}`;
 }
 
 function showTime (timestamp) {
-  let time = new Date (timestamp*1000);
+  let time = new Date (timestamp);
   let hours = time.getHours();
   let minutes = time.getMinutes ();
   let conMinutes = ("0" + minutes).slice(-2);
@@ -59,10 +59,10 @@ function showTemperature (response) {
   nowWindSpeed.innerHTML = windSpeed;
   
   
-  let timestamp = response.data.dt;
+  let timestamp = response.data.dt*1000;
   let d = new Date (timestamp);
   let localTime = d.getTime ();
-  let localOffset = d.getTimezoneOffset ()*60;
+  let localOffset = d.getTimezoneOffset()*60;
   let utc = localTime + localOffset;
   let timezone = response.data.timezone;
   let conLocalTimestamp = utc+timezone;
@@ -171,10 +171,10 @@ function showForecast (response){
     <div class="row align-items-center">
     <div class="col-1"></div>
       <div class="col-2">
-        ${showDate (forecast.dt)}
+        ${showDate (forecast.dt*1000)}
         </div>
       <div class="col-2">
-        ${showDay (forecast.dt)}
+        ${showDay (forecast.dt*1000)}
       </div>
       <div class="col-2">
         <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
@@ -243,10 +243,10 @@ function showForecast (response){
      <div class="row align-items-center">
       <div class="col-1"></div>
       <div class="col-2">
-        ${showDate (lastForecast.dt)}
+        ${showDate (lastForecast.dt*1000)}
       </div>
       <div class="col-2">
-        ${showDay (lastForecast.dt)}
+        ${showDay (lastForecast.dt*1000)}
       </div>
       <div class="col-2">
         <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
@@ -389,7 +389,7 @@ function handleCheckBoxFahrenheit (event) {
   // Forecast 1 to 4
   let checked = this.checked;
   
-  let forecastMinTemp = document.querySelectorAll (".forecast-min-temp");
+  let forecastMinTemp = document.querySelectorAll (".forecast-min-temp");  
   forecastMinTemp.forEach (convertMin);
   function convertMin (item) {
     let currentTemp = item.innerHTML;
@@ -412,13 +412,9 @@ function handleCheckBoxFahrenheit (event) {
       if (checked) {
         let forecastFahMaxTemp = (currentTemp*9)/5+32;
         item.innerHTML = Math.round (forecastFahMaxTemp);
-        //let forecastTempUnitChange = document.querySelector (".forecast-max-temp-unit");
-        //forecastTempUnitChange.innerHTML = `F`;
       } else {
         let returnCelMaxTemp = ((currentTemp - 32))*5/9;
         item.innerHTML = Math.round (returnCelMaxTemp);
-        //let forecastTempUnitChange = document.querySelector(".forecast-max-temp-unit");
-        //forecastTempUnitChange.innerHTML = `C`;
       }
     }
 
