@@ -43,7 +43,7 @@ function showTime (timestamp) {
 //Main-session
 
 function showTemperature (response) {
-//console.log(response.data);
+console.log(response.data);
   celsiusTemperature = response.data.main.temp;
 
   let temperature = Math.round(celsiusTemperature); 
@@ -61,11 +61,17 @@ function showTemperature (response) {
   
   let timestamp = response.data.dt*1000;
   let d = new Date (timestamp);
+  //console.log(d);
   let localTime = d.getTime ();
-  let localOffset = d.getTimezoneOffset()*60;
+  //console.log(localTime);
+  let localOffset = d.getTimezoneOffset()*60*1000;
+  //console.log(localOffset);
   let utc = localTime + localOffset;
-  let timezone = response.data.timezone;
+  //console.log(utc);
+  let timezone = response.data.timezone*1000;
+  //console.log(timezone);
   let conLocalTimestamp = utc+timezone;
+  //console.log(conLocalTimestamp);
   let todayDate = document.querySelector ("#main-session-date");
   todayDate.innerHTML = showDate (conLocalTimestamp);
   let todayDay = document.querySelector ("#main-session-day");
