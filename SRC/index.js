@@ -126,7 +126,7 @@ function showForecast (response){
   let forecast = null;
   
   
-  for (let index = 1; index < 5; index ++) {
+  for (let index = 1; index < 6; index ++) {
     forecast = response.data.daily[index];
     
     let iconCode = forecast.weather[0].icon;
@@ -166,11 +166,16 @@ function showForecast (response){
     } else if (iconCode === "50d" || iconCode === "50n"){
       forecastSrc = `IMG/mist_50.png`; 
       forecastAlt = forecast.weather[0].description;   
-    }
-    
+    }    
     
     celsiusForecastMinTemp = forecast.temp.min;
     celsiusForecastMaxTemp = forecast.temp.max;
+
+    function showSegmentation () {
+      if (index<5) {return "<hr/>"}
+      else if (index === 5) {return ""}
+    }
+
     
     forecastElement.innerHTML += `
     <p>
@@ -196,80 +201,12 @@ function showForecast (response){
       </div>
       <div class="col-1"></div>
      </div>
-     </p>
-     <hr/>
+    </p>
+    ${showSegmentation ()}
      `;
     } 
     
-    lastForecast = response.data.daily[5];
-    let iconCode = lastForecast.weather[0].icon;
-      if (iconCode === "02d") {
-        forecastSrc = `IMG/cloudy with sun_02d.png`; 
-      forecastAlt = lastForecast.weather[0].description;
-    } else if (iconCode === "02n") {
-      forecastSrc = `IMG/few clouds_02n.png`;
-      forecastAlt =lastForecast.weather[0].description;
-    } else if (iconCode === "01d") {
-      forecastSrc = `IMG/sunny_01d.png`; 
-      forecastAlt =lastForecast.weather[0].description;
-    } else if (iconCode === "01n") {
-      forecastSrc = `IMG/clear sky_01n.png`; 
-      forecastAlt =lastForecast.weather[0].description;
-    } else if (iconCode === "03d" || iconCode === "03n"){
-      forecastSrc = `IMG/scattered clouds_03.png`; 
-      forecastAlt =lastForecast.weather[0].description;
-    } else if (iconCode === "04d" || iconCode === "04n"){
-      forecastSrc = `IMG/broken clouds_04.png`; 
-      forecastAlt = lastForecast.weather[0].description;    
-    } else if (iconCode === "09d" || iconCode === "09n"){
-      forecastSrc = `IMG/shower rain_09.png`; 
-      forecastAlt = flastForecast.weather[0].description;   
-    } else if (iconCode === "10d"){ 
-      forecastSrc = `IMG/rain_10d.png`; 
-      forecastAlt = lastForecast.weather[0].description;
-    } else if (iconCode === "10n"){ 
-      forecastSrc = `IMG/rain_10n.png`; 
-      forecastAlt = lastForecast.weather[0].description;
-    } else if (iconCode === "11d" || iconCode === "11n"){
-      forecastSrc = `IMG/thunderstorm_11.png`; 
-      forecastAlt = flastForecast.weather[0].description;   
-    } else if (iconCode === "13d" || iconCode === "13n"){
-      forecastSrc = `IMG/snow_13.png`; 
-      forecastAlt = lastForecast.weather[0].description;   
-    } else if (iconCode === "50d" || iconCode === "50n"){
-      forecastSrc = `IMG/mist_50.png`; 
-      forecastAlt = lastForecast.weather[0].description;   
-    }
     
-    celsiusLastForecastMinTemp = lastForecast.temp.min;
-    celsiusLastForecastMaxTemp = lastForecast.temp.max;
-    
-    forecastElement.innerHTML += `
-    <p>
-     <div class="row align-items-center">
-      <div class="col-1"></div>
-      <div class="col-2">
-        ${showDate (lastForecast.dt*1000)}
-      </div>
-      <div class="col-2">
-        ${showDay (lastForecast.dt*1000)}
-      </div>
-      <div class="col-2">
-        <img src="${forecastSrc}" alt="${forecastAlt}" class="small-image" id="forecast-icon"/>
-      </div>
-      <div class="col-2">
-        <span class="last-forecast-min-temp"> ${Math.round(celsiusLastForecastMinTemp)} </span> ° / 
-        <span class="last-forecast-max-temp"> ${Math.round(celsiusLastForecastMaxTemp)} </span> ° 
-        <span class="last-forecast-max-temp-unit"> C </span>
-      </div>
-      <div class="col-2">
-        <i class="fas fa-umbrella"></i> ${(lastForecast.pop)*100}% <br/>
-        <i class="fas fa-wind"></i> ${Math.round(lastForecast.wind_speed*3600/1000)} km/h
-        </div>
-        <div class="col-1"></div>
-        </div>
-        </p>
-        `;
   }
         
         
@@ -433,39 +370,14 @@ function handleCheckBoxFahrenheit (event) {
       item.innerHTML = `C`;
      }
     }
-  
 
-  //last forecast
-
-  let lastForecastMinTemp = document.querySelector (".last-forecast-min-temp");
-  if (this.checked) {
-    let lastForecastFahMinTemp = (celsiusLastForecastMinTemp*9)/5+32;
-    lastForecastMinTemp.innerHTML = Math.round (lastForecastFahMinTemp);
-  } else {
-    lastForecastMinTemp.innerHTML = Math.round (celsiusLastForecastMinTemp);
-  }
-
-  let lastForecastMaxTemp = document.querySelector (".last-forecast-max-temp");
-  if (this.checked) {
-    let lastForecastFahMaxTemp = (celsiusLastForecastMaxTemp*9)/5+32;
-    lastForecastMaxTemp.innerHTML = Math.round (lastForecastFahMaxTemp);
-    let lastForecastTempUnitChange = document.querySelector (".last-forecast-max-temp-unit");
-    lastForecastTempUnitChange.innerHTML = `F`;
-  } else {
-    lastForecastMaxTemp.innerHTML = Math.round (celsiusLastForecastMaxTemp);
-    let lastForecastTempUnitChange = document.querySelector (".last-forecast-max-temp-unit");
-    lastForecastTempUnitChange.innerHTML = `C`;
-  }
 }
 
 let celsiusTemperature = null;
 let celsiusMinTemp = null;
 let celsiusMaxTemp = null;
 let celsiusForecastMinTemp = null;
-let celsiusForecastMaxTemp = null;
-let celsiusLastForecastMinTemp = null;
-let celsiusLastForecastMaxTemp = null;
-    
+let celsiusForecastMaxTemp = null;    
 
 
 let checkBox = document.querySelector ("#check-box");
