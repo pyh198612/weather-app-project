@@ -255,8 +255,8 @@ function searchCity (event) {
   
 }
 
-let searchEngine = document.querySelector ("#search-form");
-searchEngine.addEventListener ("submit", searchCity);
+let searchEngine = document.querySelector (".search-button");
+searchEngine.addEventListener ("click", searchCity);
 
 // For Current button
 function getCurrentLocationName (response) {
