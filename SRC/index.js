@@ -255,7 +255,7 @@ function searchCity (event) {
   
 }
 
-let searchEngine = document.querySelector (".search-button");
+let searchEngine = document.querySelector ("#search-form");
 searchEngine.addEventListener ("submit", searchCity);
 
 // For Current button
