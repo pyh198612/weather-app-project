@@ -255,8 +255,7 @@ function searchCity (event) {
   
 }
 
-
-let searchEngine = document.querySelector ("#search-form");
+let searchEngine = document.querySelector (".search-button");
 searchEngine.addEventListener ("submit", searchCity);
 
 // For Current button
@@ -329,7 +328,7 @@ function handleCheckBoxFahrenheit (event) {
   }
 
 
-  // Forecast 1 to 4
+  // Forecast 
   let checked = this.checked;
   
   let forecastMinTemp = document.querySelectorAll (".forecast-min-temp");  
